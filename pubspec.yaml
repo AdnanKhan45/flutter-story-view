@@ -4,8 +4,8 @@ version: 0.0.1
 
 license: MIT
 
-repository: https://github.com/AdnanKhan45/flutter_storyview/tree/main
-homepage: https://github.com/AdnanKhan45/flutter_storyview/blob/main/lib/flutter_story_view.dart
+repository: https://github.com/AdnanKhan45/flutter-story-view/tree/main
+homepage: https://github.com/AdnanKhan45/flutter-story-view/blob/main/lib/flutter_story_view.dart
 
 metadata:
   author: Muhammad Adnan
