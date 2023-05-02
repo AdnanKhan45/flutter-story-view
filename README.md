@@ -29,12 +29,6 @@ page.
 
 To use this plugin, add `flutter_story_view` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
 
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
 ## Usage
 
 Import the package into your code
