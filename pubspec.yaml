@@ -1,5 +1,5 @@
 name: flutter_story_view
-description: This package allows to create stories like WhatsApp and Instagram.
+description: Display stories like WhatsApp and Instagram. Allows video and image support both from assets and url. Also allows gestures pause, onTapNext, onTapPrevious.
 version: 0.0.1
 
 license: MIT

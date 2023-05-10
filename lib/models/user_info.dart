@@ -1,6 +1,4 @@
-
 class UserInfo {
-
   final String? username;
   final String? profileUrl;
 

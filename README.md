@@ -7,6 +7,7 @@ WhatsApp story view package, for apps with stories like **Whatsapp** and **Insta
   <img src="https://i.imgur.com/jVB1Akw.jpg" width=400 />
   <img src="https://i.imgur.com/i66REow.png" width=400 />
   <img src="https://i.imgur.com/pOBYsFn.png" width=400 />
+    
 </p>
 
 This a Flutter widget to display stories like **Whatsapp** and **Instagram**. This can also be used
@@ -51,7 +52,7 @@ So having these, you can handily customize each single story the way you want.
 
 ```dart
 final itemImage = StoryItem(
-    url: "your image url goes here",
+    url: "your image url/asset goes here",
     type: StoryItemType.image,
     viewers: [],
     duration: 3 // for image if duration was null it will be 3 by default.
@@ -62,7 +63,7 @@ final itemImage = StoryItem(
 
 ```dart
 final itemImage = StoryItem(
-    url: "your video url goes here",
+    url: "your video url/asset goes here",
     type: StoryItemType.video,
     viewers: [],
     duration: 10 // for video the duration would be 30 seconds if video duration gets longer than 30 seconds.
@@ -79,5 +80,5 @@ merge it if found useful. Thanks
 
 ### Created & Maintained By
 
-[@MuhammadAdnan](https://github.com/AdnanKhan45) , Youtube : [@eTechViral](https://www.youtube.com/c/eTechViral) , LinkedIn  : [@MuhammadAdnan](https://www.linkedin.com/in/muhammad-adnan-23bb8821b/) , Instagram  : [@MuhammadAdnan](https://www.instagram.com/dev.adnankhan/)
+[@MuhammadAdnan](https://github.com/AdnanKhan45), Youtube : [@eTechViral](https://www.youtube.com/c/eTechViral), LinkedIn  : [@MuhammadAdnan](https://www.linkedin.com/in/muhammad-adnan-23bb8821b/) , Instagram  : [@MuhammadAdnan](https://www.instagram.com/dev.adnankhan/), LinkedIn : [@eTechViral](https://www.linkedin.com/company/etechviral/), Instagram : [@eTechViral](https://www.instagram.com/etechviral/)
 

@@ -61,17 +61,17 @@ class _StoryIndicatorState extends State<StoryIndicator> {
       indicators.add(
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(right: 4.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(4)),
-              child: LinearProgressIndicator(
-                minHeight: widget.indicatorHeight ?? 2,
-                value: indicatorValue,
-                backgroundColor: widget.indicatorColor ?? Colors.grey[500],
-                valueColor: AlwaysStoppedAnimation<Color>(widget.indicatorValueColor ?? Colors.white),
-              ),
-            )
-          ),
+              padding: const EdgeInsets.only(right: 4.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+                child: LinearProgressIndicator(
+                  minHeight: widget.indicatorHeight ?? 2,
+                  value: indicatorValue,
+                  backgroundColor: widget.indicatorColor ?? Colors.grey[500],
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      widget.indicatorValueColor ?? Colors.white),
+                ),
+              )),
         ),
       );
     }

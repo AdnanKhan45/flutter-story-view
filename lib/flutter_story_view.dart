@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -38,8 +37,10 @@ class FlutterStoryView extends StatefulWidget {
   final List<StoryItem> storyItems;
   // Optional caption for the story
   final String? caption;
+
   /// User Info e.g username and profile image
   final UserInfo? userInfo;
+
   /// Time when the story has been created
   final DateTime? createdAt;
 
@@ -54,25 +55,24 @@ class FlutterStoryView extends StatefulWidget {
 
   final bool? enableOnHoldHide;
 
-  FlutterStoryView({
-    required this.onComplete,
-    required this.onPageChanged,
-    this.caption,
-    this.userInfo,
-    this.createdAt,
-    required this.storyItems,
-    this.indicatorHeight,
-    this.indicatorColor,
-    this.indicatorValueColor,
-    this.enableOnHoldHide = true
-  });
+  FlutterStoryView(
+      {required this.onComplete,
+      required this.onPageChanged,
+      this.caption,
+      this.userInfo,
+      this.createdAt,
+      required this.storyItems,
+      this.indicatorHeight,
+      this.indicatorColor,
+      this.indicatorValueColor,
+      this.enableOnHoldHide = true});
 
   @override
   _FlutterStoryViewState createState() => _FlutterStoryViewState();
 }
 
-class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProviderStateMixin {
-
+class _FlutterStoryViewState extends State<FlutterStoryView>
+    with TickerProviderStateMixin {
   /// Main Controller
   AnimationController? _animationController;
   VideoPlayerController? _videoController;
@@ -96,7 +96,6 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
   bool _isVideoLoading = false;
 
   bool _isPaused = false;
-
 
   @override
   void initState() {
@@ -146,7 +145,10 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
             _videoController!.setLooping(true); // Enable looping
           }
 
-          Duration clampedDuration = _videoController!.value.duration.inSeconds > 30 ? Duration(seconds: 30) : _videoController!.value.duration;
+          Duration clampedDuration =
+              _videoController!.value.duration.inSeconds > 30
+                  ? Duration(seconds: 30)
+                  : _videoController!.value.duration;
           _startAnimation(index, duration: clampedDuration);
         });
     } else {
@@ -155,7 +157,8 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
   }
 
   void _startAnimation(int index, {Duration? duration}) {
-    Duration storyDuration = duration ?? Duration(seconds: widget.storyItems[index].duration!);
+    Duration storyDuration =
+        duration ?? Duration(seconds: widget.storyItems[index].duration!);
 
     _animationController = AnimationController(
       vsync: this,
@@ -189,7 +192,8 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
       currentItemIndex++;
       widget.onPageChanged(currentItemIndex);
       setState(() {
-        _progress = 0.0; // Reset progress value to 0 when the story automatically advances
+        _progress =
+            0.0; // Reset progress value to 0 when the story automatically advances
       });
       _playStory(currentItemIndex);
     }
@@ -251,7 +255,6 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -263,13 +266,12 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
             Stack(
               children: List.generate(
                 widget.storyItems.length,
-                    (index) {
-                  var story =  widget.storyItems[index];
+                (index) {
+                  var story = widget.storyItems[index];
                   return Visibility(
                       visible: currentItemIndex == index,
                       maintainState: true,
-                      child: _storyItem(story)
-                  );
+                      child: _storyItem(story));
                 },
               ),
             ),
@@ -278,7 +280,11 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
             /// check out widget in widgets dir.
             AnimatedOpacity(
               duration: Duration(milliseconds: 200),
-              opacity: widget.enableOnHoldHide == false ? 1 : !_isPaused ? 1 : 0,
+              opacity: widget.enableOnHoldHide == false
+                  ? 1
+                  : !_isPaused
+                      ? 1
+                      : 0,
               child: StoryIndicator(
                 storyItemsLen: widget.storyItems.length,
                 currentItemIndex: currentItemIndex, // Add this
@@ -300,7 +306,11 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
       children: [
         AnimatedOpacity(
           duration: Duration(milliseconds: 200),
-          opacity: widget.enableOnHoldHide == false ? 1 : !_isPaused ? 1 : 0,
+          opacity: widget.enableOnHoldHide == false
+              ? 1
+              : !_isPaused
+                  ? 1
+                  : 0,
           child: Container(
             height: 100,
             padding: EdgeInsets.only(left: 10, right: 10, top: 40),
@@ -327,8 +337,11 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
                       height: 45,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(30),
-                        child:
-                        CachedNetworkImage(imageUrl: widget.userInfo!.profileUrl != null ? widget.userInfo!.profileUrl! : "https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=699&q=80", fit: BoxFit.cover),
+                        child: CachedNetworkImage(
+                            imageUrl: widget.userInfo!.profileUrl != null
+                                ? widget.userInfo!.profileUrl!
+                                : "https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=699&q=80",
+                            fit: BoxFit.cover),
                       ),
                     ),
                     SizedBox(
@@ -348,7 +361,7 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
                               height: 2,
                             ),
                             Text(
-                              "${widget.createdAt == null? DateFormat.jm().format(DateTime.now()) : DateFormat.jm().format(widget.createdAt!)}",
+                              "${widget.createdAt == null ? DateFormat.jm().format(DateTime.now()) : DateFormat.jm().format(widget.createdAt!)}",
                               style: TextStyle(color: Colors.grey),
                             ),
                           ],
@@ -366,14 +379,21 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
           child: Container(
             child: Stack(
               children: [
-
                 Visibility(
                   visible:
-                  currentItemIndex == widget.storyItems.indexOf(story) &&
-                      story.type == StoryItemType.video &&
-                      (_videoController == null ||
-                          !_videoController!.value.isInitialized) && _isVideoLoading,
-                  child: Container(color: Colors.grey[600], child: Center(child: CircularProgressIndicator(color: Colors.teal,),),),
+                      currentItemIndex == widget.storyItems.indexOf(story) &&
+                          story.type == StoryItemType.video &&
+                          (_videoController == null ||
+                              !_videoController!.value.isInitialized) &&
+                          _isVideoLoading,
+                  child: Container(
+                    color: Colors.grey[600],
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.teal,
+                      ),
+                    ),
+                  ),
                 ),
 
                 _switchStoryItemIsVideoOrImage(
@@ -392,7 +412,9 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
                       _timer = Timer(Duration(milliseconds: 200), () {
                         _timer = null;
                         if (_tapDownTime != null && _isVideoLoading == false) {
-                          final elapsedTime = DateTime.now().difference(_tapDownTime!).inMilliseconds;
+                          final elapsedTime = DateTime.now()
+                              .difference(_tapDownTime!)
+                              .inMilliseconds;
                           if (elapsedTime >= 200) {
                             setState(() => _isPaused = true);
                             _pauseTimer();
@@ -408,7 +430,9 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
                     },
                     onTapUp: (details) {
                       if (_tapDownTime != null) {
-                        final elapsedTime = DateTime.now().difference(_tapDownTime!).inMilliseconds;
+                        final elapsedTime = DateTime.now()
+                            .difference(_tapDownTime!)
+                            .inMilliseconds;
                         if (elapsedTime > 200) {
                           _resumeTimer();
                           setState(() => _isPaused = false);
@@ -432,8 +456,11 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
                         _tapDownTime = DateTime.now();
                         _timer = Timer(Duration(milliseconds: 200), () {
                           _timer = null;
-                          if (_tapDownTime != null && _isVideoLoading == false) {
-                            final elapsedTime = DateTime.now().difference(_tapDownTime!).inMilliseconds;
+                          if (_tapDownTime != null &&
+                              _isVideoLoading == false) {
+                            final elapsedTime = DateTime.now()
+                                .difference(_tapDownTime!)
+                                .inMilliseconds;
                             if (elapsedTime >= 200) {
                               setState(() => _isPaused = true);
                               _pauseTimer();
@@ -449,7 +476,9 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
                       },
                       onTapUp: (details) {
                         if (_tapDownTime != null) {
-                          final elapsedTime = DateTime.now().difference(_tapDownTime!).inMilliseconds;
+                          final elapsedTime = DateTime.now()
+                              .difference(_tapDownTime!)
+                              .inMilliseconds;
                           if (elapsedTime > 200) {
                             _resumeTimer();
                             setState(() => _isPaused = false);
@@ -468,7 +497,11 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
         ),
         AnimatedOpacity(
           duration: Duration(milliseconds: 200),
-          opacity: widget.enableOnHoldHide == false ? 1 : !_isPaused ? 1 : 0,
+          opacity: widget.enableOnHoldHide == false
+              ? 1
+              : !_isPaused
+                  ? 1
+                  : 0,
           child: Container(
             height: 100,
             width: double.infinity,
@@ -477,7 +510,8 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
             child: Column(
               children: [
                 Expanded(
-                  child: Text("${currentItemIndex == 0 ? widget.caption ?? "" : ""}"),
+                  child: Text(
+                      "${currentItemIndex == 0 ? widget.caption ?? "" : ""}"),
                 ),
                 Column(
                   children: [
@@ -500,10 +534,10 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
   }
 
   _switchStoryItemIsVideoOrImage(
-      String url, {
-        required String type,
-        VideoPlayerController? controller,
-      }) {
+    String url, {
+    required String type,
+    VideoPlayerController? controller,
+  }) {
     bool isAsset = url.startsWith('assets/');
     switch (type) {
       case StoryItemType.image:
@@ -512,5 +546,4 @@ class _FlutterStoryViewState extends State<FlutterStoryView> with TickerProvider
         return StoryVideo.url(url, controller);
     }
   }
-
 }
