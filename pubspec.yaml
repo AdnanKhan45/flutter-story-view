@@ -1,6 +1,6 @@
 name: flutter_story_view
 description: Display stories like WhatsApp and Instagram. Allows video and image support both from assets and url. Also allows gestures pause, onTapNext, onTapPrevious.
-version: 0.0.1
+version: 0.0.2
 
 license: MIT
 
