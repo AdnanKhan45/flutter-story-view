@@ -34,6 +34,8 @@ class FlutterStoryView extends StatefulWidget {
   /// [OnPageChanged] is called when a story item changes
   final OnPageChanged onPageChanged;
 
+  final VoidCallback? onMenuTapListener;
+
   final List<StoryItem> storyItems;
   // Optional caption for the story
   final String? caption;
@@ -59,6 +61,7 @@ class FlutterStoryView extends StatefulWidget {
       {required this.onComplete,
       required this.onPageChanged,
       this.caption,
+        this.onMenuTapListener,
       this.userInfo,
       this.createdAt,
       required this.storyItems,
@@ -368,7 +371,7 @@ class _FlutterStoryViewState extends State<FlutterStoryView>
                         ),
                       ),
                     ),
-                    Icon(Icons.more_vert)
+                    GestureDetector(onTap: widget.onMenuTapListener,child: Icon(Icons.more_vert))
                   ],
                 ),
               ],
