@@ -127,7 +127,7 @@ class _FlutterStoryViewState extends State<FlutterStoryView>
 
       _videoController = isAsset
           ? VideoPlayerController.asset(story.url)
-          : VideoPlayerController.network(story.url);
+          : VideoPlayerController.networkUrl(Uri.parse(story.url));
 
       _videoController!
         ..initialize().then((_) {
