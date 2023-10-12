@@ -20,7 +20,10 @@ class StoryIndicator extends StatefulWidget {
   // Background color of indicator
   final Color? indicatorValueColor;
 
-  const StoryIndicator({
+  // Padding of indicator
+  final EdgeInsets? indicatorPadding;
+
+  StoryIndicator({
     Key? key,
     required this.storyItemsLen,
     required this.currentItemIndex,
@@ -28,6 +31,7 @@ class StoryIndicator extends StatefulWidget {
     this.indicatorHeight,
     this.indicatorColor,
     this.indicatorValueColor,
+    this.indicatorPadding = const EdgeInsets.only(top: 40.0),
   }) : super(key: key);
 
   @override
@@ -61,24 +65,25 @@ class _StoryIndicatorState extends State<StoryIndicator> {
       indicators.add(
         Expanded(
           child: Padding(
-              padding: const EdgeInsets.only(right: 4.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(4)),
-                child: LinearProgressIndicator(
-                  minHeight: widget.indicatorHeight ?? 2,
-                  value: indicatorValue,
-                  backgroundColor: widget.indicatorColor ?? Colors.grey[500],
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      widget.indicatorValueColor ?? Colors.white),
-                ),
-              )),
+            padding: const EdgeInsets.only(right: 4.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(4)),
+              child: LinearProgressIndicator(
+                minHeight: widget.indicatorHeight ?? 2,
+                value: indicatorValue,
+                backgroundColor: widget.indicatorColor ?? Colors.grey[500],
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    widget.indicatorValueColor ?? Colors.white),
+              ),
+            ),
+          ),
         ),
       );
     }
 
     /// Display the progress indicators in a row.
     return Padding(
-      padding: const EdgeInsets.only(top: 40.0),
+      padding: widget.indicatorPadding!,
       child: Row(
         children: indicators,
       ),

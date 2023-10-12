@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_story_view/widgets/story_text.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_story_view/models/story_item.dart';
@@ -57,18 +58,43 @@ class FlutterStoryView extends StatefulWidget {
 
   final bool? enableOnHoldHide;
 
-  FlutterStoryView(
-      {required this.onComplete,
-      required this.onPageChanged,
-      this.caption,
-        this.onMenuTapListener,
-      this.userInfo,
-      this.createdAt,
-      required this.storyItems,
-      this.indicatorHeight,
-      this.indicatorColor,
-      this.indicatorValueColor,
-      this.enableOnHoldHide = true});
+  // Back button on the top left
+  final bool? showBackIcon;
+
+  // Menu button on the top right
+  final bool? showMenuIcon;
+
+  // Show reply button
+  final bool? showReplyButton;
+
+  // Reply button text
+  final String? replyButtonText;
+
+  // Reply button functionality
+  final VoidCallback? onReplyTap;
+
+  // Padding of indicator
+  final EdgeInsets? indicatorPadding;
+
+  FlutterStoryView({
+    required this.onComplete,
+    required this.onPageChanged,
+    this.caption,
+    this.onMenuTapListener,
+    this.userInfo,
+    this.createdAt,
+    required this.storyItems,
+    this.indicatorHeight,
+    this.indicatorColor,
+    this.indicatorValueColor,
+    this.enableOnHoldHide = true,
+    this.showBackIcon = true,
+    this.showMenuIcon = true,
+    this.showReplyButton = true,
+    this.replyButtonText = "Reply",
+    this.onReplyTap,
+    this.indicatorPadding = const EdgeInsets.only(top: 40.0),
+  });
 
   @override
   _FlutterStoryViewState createState() => _FlutterStoryViewState();
@@ -140,7 +166,7 @@ class _FlutterStoryViewState extends State<FlutterStoryView>
           // Limit video duration to 30 seconds
           if (_videoController!.value.duration.inSeconds > 30) {
             _videoController!.setLooping(false); // Disable looping
-            Timer(Duration(seconds: 30), () {
+            Timer(const Duration(seconds: 30), () {
               _onAnimationCompleted();
               _videoController!.pause();
             });
@@ -150,7 +176,7 @@ class _FlutterStoryViewState extends State<FlutterStoryView>
 
           Duration clampedDuration =
               _videoController!.value.duration.inSeconds > 30
-                  ? Duration(seconds: 30)
+                  ? const Duration(seconds: 30)
                   : _videoController!.value.duration;
           _startAnimation(index, duration: clampedDuration);
         });
@@ -272,29 +298,34 @@ class _FlutterStoryViewState extends State<FlutterStoryView>
                 (index) {
                   var story = widget.storyItems[index];
                   return Visibility(
-                      visible: currentItemIndex == index,
-                      maintainState: true,
-                      child: _storyItem(story));
+                    visible: currentItemIndex == index,
+                    maintainState: true,
+                    child: _storyItem(story),
+                  );
                 },
               ),
             ),
 
             /// Story indicator which plays with timer, progress and total story Items
             /// check out widget in widgets dir.
-            AnimatedOpacity(
-              duration: Duration(milliseconds: 200),
-              opacity: widget.enableOnHoldHide == false
-                  ? 1
-                  : !_isPaused
-                      ? 1
-                      : 0,
-              child: StoryIndicator(
-                storyItemsLen: widget.storyItems.length,
-                currentItemIndex: currentItemIndex, // Add this
-                progress: _progress,
-                indicatorColor: widget.indicatorColor,
-                indicatorHeight: widget.indicatorHeight,
-                indicatorValueColor: widget.indicatorValueColor,
+            Align(
+              alignment: Alignment.topCenter,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: widget.enableOnHoldHide == false
+                    ? 1
+                    : !_isPaused
+                        ? 1
+                        : 0,
+                child: StoryIndicator(
+                  storyItemsLen: widget.storyItems.length,
+                  currentItemIndex: currentItemIndex, // Add this
+                  progress: _progress,
+                  indicatorColor: widget.indicatorColor,
+                  indicatorHeight: widget.indicatorHeight,
+                  indicatorValueColor: widget.indicatorValueColor,
+                  indicatorPadding: widget.indicatorPadding,
+                ),
               ),
             ),
           ],
@@ -308,7 +339,7 @@ class _FlutterStoryViewState extends State<FlutterStoryView>
     return Column(
       children: [
         AnimatedOpacity(
-          duration: Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 200),
           opacity: widget.enableOnHoldHide == false
               ? 1
               : !_isPaused
@@ -316,62 +347,75 @@ class _FlutterStoryViewState extends State<FlutterStoryView>
                   : 0,
           child: Container(
             height: 100,
-            padding: EdgeInsets.only(left: 10, right: 10, top: 40),
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 40),
             color: Colors.black,
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    GestureDetector(
+                    if (widget.showBackIcon != null && widget.showBackIcon!)
+                      GestureDetector(
                         onTap: widget.onComplete,
-                        child: Icon(Icons.arrow_back)),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      width: 45,
-                      height: 45,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(30),
-                        child: CachedNetworkImage(
-                            imageUrl: widget.userInfo!.profileUrl != null
-                                ? widget.userInfo!.profileUrl!
-                                : "https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=699&q=80",
-                            fit: BoxFit.cover),
+                        child: const Icon(
+                          Icons.arrow_back,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: Container(
+                    if (widget.userInfo != null) ...[
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      if (widget.userInfo!.profileUrl != null)
+                        Container(
+                          width: 45,
+                          height: 45,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(30),
+                            child: CachedNetworkImage(
+                              imageUrl: widget.userInfo!.profileUrl!,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "${widget.userInfo!.username != null ? widget.userInfo!.username! : "John Doe"}",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              "${widget.createdAt == null ? DateFormat.jm().format(DateTime.now()) : DateFormat.jm().format(widget.createdAt!)}",
-                              style: TextStyle(color: Colors.grey),
-                            ),
+                            if (widget.userInfo!.username != null) ...[
+                              Text(
+                                widget.userInfo!.username!,
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                              const SizedBox(
+                                height: 2,
+                              ),
+                            ],
+                            if (widget.createdAt != null)
+                              Text(
+                                DateFormat.jm().format(widget.createdAt!),
+                                style: const TextStyle(color: Colors.grey),
+                              ),
                           ],
                         ),
                       ),
-                    ),
-                    GestureDetector(onTap: widget.onMenuTapListener,child: Icon(Icons.more_vert))
+                    ],
+                    if (widget.showMenuIcon != null && widget.showMenuIcon!)
+                      GestureDetector(
+                        onTap: widget.onMenuTapListener,
+                        child: const Icon(
+                          Icons.more_vert,
+                        ),
+                      )
                   ],
                 ),
               ],
@@ -379,40 +423,83 @@ class _FlutterStoryViewState extends State<FlutterStoryView>
           ),
         ),
         Expanded(
-          child: Container(
-            child: Stack(
-              children: [
-                Visibility(
-                  visible:
-                      currentItemIndex == widget.storyItems.indexOf(story) &&
-                          story.type == StoryItemType.video &&
-                          (_videoController == null ||
-                              !_videoController!.value.isInitialized) &&
-                          _isVideoLoading,
-                  child: Container(
-                    color: Colors.grey[600],
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.teal,
-                      ),
+          child: Stack(
+            children: [
+              Visibility(
+                visible: currentItemIndex == widget.storyItems.indexOf(story) &&
+                    story.type == StoryItemType.video &&
+                    (_videoController == null ||
+                        !_videoController!.value.isInitialized) &&
+                    _isVideoLoading,
+                child: Container(
+                  color: Colors.grey[600],
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.teal,
                     ),
                   ),
                 ),
+              ),
 
-                _switchStoryItemIsVideoOrImage(
-                  story.url,
-                  type: story.type,
-                  controller: _videoController, // Pass the controller
+              _switchStoryItemIsVideoOrImage(
+                story.url,
+                type: story.type,
+                controller: _videoController, // Pass the controller
+              ),
+
+              // Next story area
+              Align(
+                alignment: Alignment.centerRight,
+                heightFactor: 1,
+                child: GestureDetector(
+                  onTapDown: (details) {
+                    _tapDownTime = DateTime.now();
+                    _timer = Timer(const Duration(milliseconds: 200), () {
+                      _timer = null;
+                      if (_tapDownTime != null && _isVideoLoading == false) {
+                        final elapsedTime = DateTime.now()
+                            .difference(_tapDownTime!)
+                            .inMilliseconds;
+                        if (elapsedTime >= 200) {
+                          setState(() => _isPaused = true);
+                          _pauseTimer();
+                        } else {
+                          /// Do nothing if the onTapDown is tapped less than 200 milliseconds
+                        }
+                      }
+                    });
+                  },
+                  onTapCancel: () {
+                    _resumeTimer();
+                    setState(() => _isPaused = false);
+                  },
+                  onTapUp: (details) {
+                    if (_tapDownTime != null) {
+                      final elapsedTime = DateTime.now()
+                          .difference(_tapDownTime!)
+                          .inMilliseconds;
+                      if (elapsedTime > 200) {
+                        _resumeTimer();
+                        setState(() => _isPaused = false);
+                      } else {
+                        _onTapNext();
+                      }
+                      _tapDownTime = null;
+                    }
+                  },
                 ),
+              ),
 
-                // Next story area
-                Align(
-                  alignment: Alignment.centerRight,
-                  heightFactor: 1,
+              // Previous story area
+              Align(
+                alignment: Alignment.centerLeft,
+                heightFactor: 1,
+                child: SizedBox(
+                  width: 70,
                   child: GestureDetector(
                     onTapDown: (details) {
                       _tapDownTime = DateTime.now();
-                      _timer = Timer(Duration(milliseconds: 200), () {
+                      _timer = Timer(const Duration(milliseconds: 200), () {
                         _timer = null;
                         if (_tapDownTime != null && _isVideoLoading == false) {
                           final elapsedTime = DateTime.now()
@@ -440,66 +527,19 @@ class _FlutterStoryViewState extends State<FlutterStoryView>
                           _resumeTimer();
                           setState(() => _isPaused = false);
                         } else {
-                          _onTapNext();
+                          _onTapPrevious();
                         }
                         _tapDownTime = null;
                       }
                     },
                   ),
                 ),
-
-                // Previous story area
-                Align(
-                  alignment: Alignment.centerLeft,
-                  heightFactor: 1,
-                  child: SizedBox(
-                    width: 70,
-                    child: GestureDetector(
-                      onTapDown: (details) {
-                        _tapDownTime = DateTime.now();
-                        _timer = Timer(Duration(milliseconds: 200), () {
-                          _timer = null;
-                          if (_tapDownTime != null &&
-                              _isVideoLoading == false) {
-                            final elapsedTime = DateTime.now()
-                                .difference(_tapDownTime!)
-                                .inMilliseconds;
-                            if (elapsedTime >= 200) {
-                              setState(() => _isPaused = true);
-                              _pauseTimer();
-                            } else {
-                              /// Do nothing if the onTapDown is tapped less than 200 milliseconds
-                            }
-                          }
-                        });
-                      },
-                      onTapCancel: () {
-                        _resumeTimer();
-                        setState(() => _isPaused = false);
-                      },
-                      onTapUp: (details) {
-                        if (_tapDownTime != null) {
-                          final elapsedTime = DateTime.now()
-                              .difference(_tapDownTime!)
-                              .inMilliseconds;
-                          if (elapsedTime > 200) {
-                            _resumeTimer();
-                            setState(() => _isPaused = false);
-                          } else {
-                            _onTapPrevious();
-                          }
-                          _tapDownTime = null;
-                        }
-                      },
-                    ),
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           ),
         ),
         AnimatedOpacity(
-          duration: Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 200),
           opacity: widget.enableOnHoldHide == false
               ? 1
               : !_isPaused
@@ -509,25 +549,34 @@ class _FlutterStoryViewState extends State<FlutterStoryView>
             height: 100,
             width: double.infinity,
             color: Colors.black,
-            padding: EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 10),
             child: Column(
               children: [
-                Expanded(
-                  child: Text(
-                      "${currentItemIndex == 0 ? widget.caption ?? "" : ""}"),
-                ),
-                Column(
-                  children: [
-                    Icon(Icons.keyboard_arrow_up),
-                    SizedBox(
-                      height: 3,
+                if (currentItemIndex == 0)
+                  if (widget.caption != null)
+                    Expanded(
+                      child: Text(
+                        widget.caption!,
+                      ),
                     ),
-                    Text("Replay"),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
+                if (widget.showReplyButton != null &&
+                    widget.showReplyButton!) ...[
+                  InkWell(
+                    onTap: widget.onReplyTap,
+                    child: Column(
+                      children: [
+                        const Icon(Icons.keyboard_arrow_up),
+                        const SizedBox(
+                          height: 3,
+                        ),
+                        Text(widget.replyButtonText!),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ]
               ],
             ),
           ),
@@ -538,7 +587,7 @@ class _FlutterStoryViewState extends State<FlutterStoryView>
 
   _switchStoryItemIsVideoOrImage(
     String url, {
-    required String type,
+    required StoryItemType type,
     VideoPlayerController? controller,
   }) {
     bool isAsset = url.startsWith('assets/');
@@ -547,6 +596,8 @@ class _FlutterStoryViewState extends State<FlutterStoryView>
         return StoryImage.url(url, isAsset: isAsset);
       case StoryItemType.video:
         return StoryVideo.url(url, controller);
+      // case StoryItemType.text:
+      //   return StoryText.url(url, controller);
     }
   }
 }
