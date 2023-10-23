@@ -527,7 +527,7 @@ class _FlutterStoryViewState extends State<FlutterStoryView>
                           _resumeTimer();
                           setState(() => _isPaused = false);
                         } else {
-                          _onTapPrevious();
+                          _onTapPrevious(); // return to previous story
                         }
                         _tapDownTime = null;
                       }
