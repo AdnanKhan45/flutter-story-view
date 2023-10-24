@@ -400,15 +400,16 @@ class _FlutterStoryViewState extends State<FlutterStoryView>
                                 height: 2,
                               ),
                             ],
-                            if (widget.createdAt != null)
-                              Text(
-                                DateFormat.jm().format(widget.createdAt!),
-                                style: const TextStyle(color: Colors.grey),
-                              ),
                           ],
                         ),
                       ),
-                    ],
+                    ] else
+                      Expanded(child: Container()),
+                    if (widget.createdAt != null)
+                      Text(
+                        DateFormat.jm().format(widget.createdAt!),
+                        style: const TextStyle(color: Colors.grey),
+                      ),
                     if (widget.showMenuIcon != null && widget.showMenuIcon!)
                       GestureDetector(
                         onTap: widget.onMenuTapListener,
