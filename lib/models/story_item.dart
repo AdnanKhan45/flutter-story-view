@@ -4,6 +4,14 @@ enum StoryItemType {
   video,
 }
 
+extension StoryItemTypeExtension on StoryItemType {
+  String get name => toString().split('.').last;
+
+  static StoryItemType fromString(String name) {
+    return StoryItemType.values.firstWhere((e) => e.name == name);
+  }
+}
+
 /// Represents a story with a URL, viewers and type.
 class StoryItem {
   /// The URL of the story.
