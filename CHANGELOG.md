@@ -1,3 +1,6 @@
+## 0.0.4
+
+* Bug Fixes, UI Changes, Dependency Updates.
 
 ## 0.0.3
 

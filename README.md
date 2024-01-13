@@ -78,6 +78,11 @@ This package will be improved more along the time, if you found any issue create
 the issue, also if you want to contribute feel free to do. I'll review your code and
 merge it if found useful. Thanks
 
+## Contributors
+
+[@berkaycatak](https://github.com/berkaycatak)
+
+
 ### Created & Maintained By
 
 [@MuhammadAdnan](https://github.com/AdnanKhan45), Youtube : [@eTechViral](https://www.youtube.com/c/eTechViral), LinkedIn  : [@MuhammadAdnan](https://www.linkedin.com/in/muhammad-adnan-23bb8821b/) , Instagram  : [@MuhammadAdnan](https://www.instagram.com/dev.adnankhan/), LinkedIn : [@eTechViral](https://www.linkedin.com/company/etechviral/), Instagram : [@eTechViral](https://www.instagram.com/etechviral/)
